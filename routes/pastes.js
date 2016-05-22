@@ -40,7 +40,7 @@ router.post('/', function(req, res, next) {
 	}).save(function(err, paste, count) {
 		if (err) {
 			req.flash("messages", {
-				"error": "Text is not valid"
+				"error": "Text is invalid or empty"
 			});
 		} else {
 			req.flash("messages", {
