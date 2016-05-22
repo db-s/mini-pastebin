@@ -1,0 +1,60 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  color: #444FAD;
+}
+
+a {
+  color: #FF6200;
+}
+
+#paste_text {
+  display: block;
+  margin-bottom: 10px;
+}
+
+input[name=submit_paste_text] {
+  border: none;
+  padding: 10px 14px;
+  border-radius: 3px;
+  background: #FF6200;
+  color: #FFF;
+  box-shadow: 1px 1px 5px -1px #000;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+input[name=submit_paste_text]:active {
+  box-shadow: none;
+}
+
+ul.paste_content {
+	list-style-type: none;
+}
+
+ul.paste_content li {
+	background: cornflowerblue;
+    color: #FFF;
+    float: left;
+    margin: 0 0 10px 10px;
+    padding: 10px;
+    border-radius: 3px;
+    min-width: 200px;
+    max-width: 400px;
+}
+
+ul.paste_content li p.txt {
+	font-style: italic;
+}
+
+ul.paste_content li p.txt a {
+  color: #FFF;
+}
+
+p.success_msg {
+  color: #00A82D;
+}
+
+p.error_msg {
+  color: #FF0000;
+}

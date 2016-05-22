@@ -1,0 +1,23 @@
+<% layout('layout'); %>
+
+<h1>Stats</h1>
+
+<hr>
+<p>Server Uptime: <%= app_uptime %> secs</p>
+<hr>
+<h2>Operating System</h2>
+<p>Type: <%= os_info.type() %></p>
+<p>Hostname: <%= os_info.hostname() %></p>
+<p>Platform: <%= os_info.platform() %></p>
+<p>Architecture: <%= os_info.arch() %></p>
+<p>System Uptime: <%= os_info.uptime() %> secs</p>
+<p>Load Average: <%= os_info.loadavg() %></p>
+<p>System Memory: <%= os_info.totalmem() %> bytes (Free: <%= os_info.freemem() %> bytes)</p>
+<p>CPUs:
+	<ul>
+		<% os_info.cpus().forEach(function(cpu) { %>
+			<li><%= cpu.model %></li>
+		<% }); %>
+	</ul>
+</p>
+<hr>

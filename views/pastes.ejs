@@ -1,0 +1,27 @@
+<h1>Paste Something</h1>
+
+<% layout('layout'); %>
+
+<% if (flash_msgs) { %>
+	<% flash_msgs.forEach(function(msgObj) { %>
+		<% if (msgObj.message.success) { %><p class="success_msg"><%= msgObj.message.success %></p><% } %>
+		<% if (msgObj.message.error) { %><p class="error_msg"><%= msgObj.message.error %></p><% } %>
+	<% }); %>
+<% } %>
+
+<form name="frm_paste_text" action="" method="POST" id="frm_paste_text">
+	<textarea name="paste_text" id="paste_text" rows="10" cols="40"></textarea>
+	<input type="submit" name="submit_paste_text" value="Save Your Text">
+</form>
+
+<% if (pastes) { %>
+<hr>
+<ul class="paste_content">
+	<% pastes.forEach(function(paste) { %>
+	<li>
+		<p class="txt"><%- nl2br(paste.text) %></p>
+		<p><%= moment(paste.created_at).fromNow() %>
+	</li>
+	<% }); %>
+</ul>
+<% } %>

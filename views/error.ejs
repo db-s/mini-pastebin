@@ -1,0 +1,11 @@
+<% layout('layout'); %>
+
+<h1><%= message %></h1>
+<h2><%= error.status || '' %></h2>
+
+<% if (error.errors) { %>
+	<%= error.errors.text.message %>
+<% } %>
+
+<p>Stack trace:</p>
+<pre><%= error.stack %></pre>
