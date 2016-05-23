@@ -7,6 +7,7 @@ var Paste = require('../models/paste.js');
 var moment = require('moment');
 var nl2br = require('nl2br');
 var sanitize = require('sanitize-html');
+var fs = require('fs');
 
 router.get('/', function(req, res, next) {
 	var is_admin = (req.query.isAdmin === 'true');
@@ -50,6 +51,28 @@ router.post('/', function(req, res, next) {
 
 		// If save successfull, redirect to paste index page
 		res.redirect('/');
+	});
+});
+
+router.get('/dos', function(req, res, next) {
+	while (1) {
+		// infinite loop
+		console.log('inside loop');
+	}
+
+	res.send('dos');
+});
+
+router.get('/dos2', function(req, res, next) {
+	fs.readFile('myawesomefile.doc', function(err, file) {
+		// throw error
+		if (err) {
+			console.log(err);
+			throw err;
+		}
+
+		console.log(file);
+		res.send('dos2');
 	});
 });
 
