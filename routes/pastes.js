@@ -18,22 +18,28 @@ var conn = mysql.createConnection({
 router.get('/', function(req, res, next) {
 	var is_admin = (req.query.isAdmin === 'true');
 	var flash_msgs = res.locals.flash;
-
-	var sterm = req.query.s || '';
-	var qry_fetch = "SELECT * FROM pastes";
-
-	if (sterm) qry_fetch += " WHERE text = '" + decodeURIComponent(sterm) + "'";
-
-	console.log(qry_fetch);
+	var qry_fetch = 'SELECT * FROM pastes';
 
 	conn.query(qry_fetch, function(err, results) {
-		console.log(results);
-
 		res.render('pastes', {
 			pastes: (is_admin === true) ? results : null,
 			flash_msgs: flash_msgs || '',
 			moment: moment,
 			nl2br: nl2br
+		});
+	});
+});
+
+router.post('/search', function(req, res, next) {
+	var sterm = req.body.id || '';
+	var qry_fetch = 'SELECT * FROM pastes';
+
+	if (sterm) qry_fetch += ' WHERE id = ' + sterm;
+
+	conn.query(qry_fetch, function(results) {
+		res.send({
+			query: qry_fetch,
+			results: results
 		});
 	});
 });
