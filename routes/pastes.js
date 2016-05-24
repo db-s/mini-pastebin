@@ -7,48 +7,50 @@ var Paste = require('../models/paste.js');
 var moment = require('moment');
 var nl2br = require('nl2br');
 var sanitize = require('sanitize-html');
+var mysql = require('mysql');
+var conn = mysql.createConnection({
+	host: 'localhost',
+	user: 'root',
+	password: 'root123',
+	database: 'mini-pastebin'
+});
 
 router.get('/', function(req, res, next) {
 	var is_admin = (req.query.isAdmin === 'true');
 	var flash_msgs = res.locals.flash;
 
-	Paste.
-		find().
-		sort('-update_at').
-		exec(function(err, pastes, count) {
-			if (err) return next(err);
+	var sterm = req.query.s || '';
+	var qry_fetch = "SELECT * FROM pastes";
 
-			res.render('pastes', {
-				pastes: (is_admin === true) ? pastes : null,
-				flash_msgs: flash_msgs || '',
-				moment: moment,
-				nl2br: nl2br
-			});
+	if (sterm) qry_fetch += " WHERE text = '" + decodeURIComponent(sterm) + "'";
+
+	console.log(qry_fetch);
+
+	conn.query(qry_fetch, function(err, results) {
+		console.log(results);
+
+		res.render('pastes', {
+			pastes: (is_admin === true) ? results : null,
+			flash_msgs: flash_msgs || '',
+			moment: moment,
+			nl2br: nl2br
 		});
+	});
 });
 
 router.post('/', function(req, res, next) {
-	var paste_text = sanitize(req.body.paste_text, {
-		allowedTags: sanitize.defaults.allowedTags.concat(['img'])
-	});
+	var paste_text = req.body.paste_text;
+	var cur_time = moment().format('YYYY-MM-DD H:mm:ss');
+	var qry_save = "INSERT INTO pastes (text, created_at, updated_at) VALUES ('" + paste_text + "', '" + cur_time + "', '" + cur_time + "')";
+
+	console.log(qry_save);
 
 	// Save paste
-	new Paste({
-		text: paste_text,
-		created_at: Date.now(),
-		update_at: Date.now()
-	}).save(function(err, paste, count) {
-		if (err) {
-			req.flash("messages", {
-				"error": "Text is invalid or empty"
-			});
-		} else {
-			req.flash("messages", {
-				"success": "Text has been saved!"
-			});
-		}
+	conn.query(qry_save, function(err, result) {
+		if (err) throw err;
 
-		// If save successfull, redirect to paste index page
+		console.log(result.insertId);
+
 		res.redirect('/');
 	});
 });
